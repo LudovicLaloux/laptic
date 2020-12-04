@@ -1,6 +1,0 @@
-/test/*
-/dist/*
-/logs/*
-/node_modules/*
-/webapp/*
-.eslintrc.js
