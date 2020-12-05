@@ -42,7 +42,9 @@ export class ExerciceCategoriesService {
     }
 
     findOne(id: number): Promise<ExerciceCategory> {
-        return this.exerciceCategoryRepository.findOne(id)
+        return this.exerciceCategoryRepository.findOne(id, {
+            relations: ["exercices"],
+        })
     }
 
     async update(

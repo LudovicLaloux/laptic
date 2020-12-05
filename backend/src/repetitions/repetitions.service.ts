@@ -26,6 +26,7 @@ export class RepetitionsService {
             repetition.repTime = createRepetitionDto.repTime
             repetition.rest = createRepetitionDto.rest
             repetition.order = createRepetitionDto.order
+            repetition.serie = createRepetitionDto.serieId
 
             const response = await queryRunner.manager.save(repetition)
             await queryRunner.commitTransaction()

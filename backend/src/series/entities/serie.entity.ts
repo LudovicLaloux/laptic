@@ -26,15 +26,15 @@ export class Serie {
     )
     exercice: Exercice
 
-    @ManyToOne(
-        () => Workout,
-        workout => workout.series,
-    )
-    workout: Workout
-
     @OneToMany(
-        () => Repetition,
+        type => Repetition,
         repetition => repetition.serie,
     )
     repetitions: Repetition[]
+
+    @ManyToOne(
+        type => Workout,
+        workout => workout.series,
+    )
+    workout: Workout
 }

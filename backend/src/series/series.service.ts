@@ -21,9 +21,10 @@ export class SeriesService {
         await queryRunner.startTransaction()
         try {
             const serie = new Serie()
-            serie.workout = createSeriesDto.workoutId
             serie.restTime = createSeriesDto.restTime
             serie.order = createSeriesDto.order
+            serie.workout = createSeriesDto.workoutId
+            serie.exercice = createSeriesDto.exerciceId
 
             const response = await queryRunner.manager.save(serie)
             await queryRunner.commitTransaction()
@@ -43,7 +44,9 @@ export class SeriesService {
     }
 
     findOne(id: number): Promise<Serie> {
-        return this.serieRepository.findOne(id)
+        return this.serieRepository.findOne(id, {
+            relations: ["repetitions"],
+        })
     }
 
     async update(id: number, updateSeriesDto: UpdateSeriesDto) {

@@ -24,6 +24,7 @@ export class WorkoutsService {
             const workout = new Workout()
             workout.name = createWorkoutDto.name
             workout.date = createWorkoutDto.date
+            workout.category = createWorkoutDto.categoryId
 
             const response = await queryRunner.manager.save(workout)
             await queryRunner.commitTransaction()

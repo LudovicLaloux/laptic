@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, IsOptional, IsInt } from "class-validator"
+import { ExerciceCategory } from "../../exercice-categories/entities/exercice-category.entity"
 
 export class CreateExerciceDto {
     @IsNotEmpty()
@@ -11,5 +12,5 @@ export class CreateExerciceDto {
 
     @IsNotEmpty()
     @IsInt()
-    categoryId: number
+    categoryId: ExerciceCategory
 }

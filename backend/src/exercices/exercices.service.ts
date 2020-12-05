@@ -24,6 +24,7 @@ export class ExercicesService {
             const exercice = new Exercice()
             exercice.name = createExerciceDto.name
             exercice.equipements = createExerciceDto.equipements
+            exercice.category = createExerciceDto.categoryId
 
             const response = await queryRunner.manager.save(exercice)
             await queryRunner.commitTransaction()

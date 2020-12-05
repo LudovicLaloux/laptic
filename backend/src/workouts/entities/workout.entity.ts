@@ -16,18 +16,18 @@ export class Workout {
     @Column("varchar", { length: 200 })
     name: string
 
-    @ManyToOne(
-        () => WorkoutCategory,
-        category => category.workouts,
-    )
-    category: WorkoutCategory
-
     @Column("date")
     date: string
 
     @OneToMany(
-        () => Serie,
+        type => Serie,
         serie => serie.workout,
     )
     series: Serie[]
+
+    @ManyToOne(
+        type => WorkoutCategory,
+        category => category.workouts,
+    )
+    category: WorkoutCategory
 }

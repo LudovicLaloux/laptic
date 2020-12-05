@@ -19,7 +19,7 @@ export class Repetition {
     order: number
 
     @ManyToOne(
-        () => Serie,
+        type => Serie,
         serie => serie.repetitions,
     )
     serie: Serie
