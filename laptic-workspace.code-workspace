@@ -9,6 +9,7 @@
         "javascript.format.insertSpaceAfterSemicolonInForStatements": false,
         "typescript.format.insertSpaceAfterSemicolonInForStatements": false,
         "prettier.semi": false,
-        "prettier.tabWidth": 4
+        "prettier.tabWidth": 4,
+        "editor.formatOnSave": true
 	}
 }

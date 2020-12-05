@@ -1,16 +1,15 @@
-import { IsNotEmpty, IsISO8601, IsString } from "class-validator" 
+import { IsNotEmpty, IsISO8601, IsString, IsInt } from "class-validator"
 
 export class CreateWorkoutDto {
-    
     @IsNotEmpty()
     @IsString()
     name: string
 
     @IsNotEmpty()
-    @IsString()
-    bloc: string
+    @IsInt()
+    categoryId: number
 
     @IsNotEmpty()
     @IsISO8601()
-	createdDate: string
+    date: string
 }

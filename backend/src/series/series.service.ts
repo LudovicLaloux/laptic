@@ -1,19 +1,18 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository, Connection } from "typeorm"
-import { CreateWorkoutDto } from "./dto/create-workout.dto"
-import { UpdateWorkoutDto } from "./dto/update-workout.dto"
-import { Workout } from "./entities/workout.entity"
+import { CreateSeriesDto } from "./dto/create-series.dto"
+import { UpdateSeriesDto } from "./dto/update-series.dto"
+import { Serie } from "./entities/serie.entity"
 
 @Injectable()
-export class WorkoutsService {
+export class SeriesService {
     constructor(
-        @InjectRepository(Workout)
-        private workoutRepository: Repository<Workout>,
+        @InjectRepository(Serie)
+        private serieRepository: Repository<Serie>,
         private connection: Connection,
     ) {}
-
-    async create(createWorkoutDto: CreateWorkoutDto) {
+    async create(createSeriesDto: CreateSeriesDto) {
         // get a connection and create a new query runner
         const queryRunner = this.connection.createQueryRunner()
 
@@ -21,11 +20,12 @@ export class WorkoutsService {
         await queryRunner.connect()
         await queryRunner.startTransaction()
         try {
-            const workout = new Workout()
-            workout.name = createWorkoutDto.name
-            workout.date = createWorkoutDto.date
+            const serie = new Serie()
+            serie.workout = createSeriesDto.workoutId
+            serie.restTime = createSeriesDto.restTime
+            serie.order = createSeriesDto.order
 
-            const response = await queryRunner.manager.save(workout)
+            const response = await queryRunner.manager.save(serie)
             await queryRunner.commitTransaction()
             return response
         } catch (error) {
@@ -38,35 +38,35 @@ export class WorkoutsService {
         }
     }
 
-    findAll(): Promise<Workout[]> {
-        return this.workoutRepository.find()
+    findAll(): Promise<Serie[]> {
+        return this.serieRepository.find()
     }
 
-    findOne(id: number): Promise<Workout> {
-        return this.workoutRepository.findOne(id, { relations: ["series"] })
+    findOne(id: number): Promise<Serie> {
+        return this.serieRepository.findOne(id)
     }
 
-    async update(id: number, UpdateWorkoutDto: UpdateWorkoutDto) {
-        // // get a connection and create a new query runner
+    async update(id: number, updateSeriesDto: UpdateSeriesDto) {
+        // get a connection and create a new query runner
         const queryRunner = this.connection.createQueryRunner()
 
         // establish real database connection using our new query runner
         await queryRunner.connect()
         await queryRunner.startTransaction()
         try {
-            // get workout to update
-            const workout = await this.workoutRepository.findOne(id)
-            // if workout doesn't exist, throw error
-            if (!workout) {
+            const serie = await this.serieRepository.findOne(id)
+            // if serie doesn't exist, throw error
+            if (!serie) {
                 throw new HttpException(
-                    "Workout id doesn't exist",
+                    "Serie id doesn't exist",
                     HttpStatus.UNPROCESSABLE_ENTITY,
                 )
             }
-            workout.name = UpdateWorkoutDto.name
-            workout.date = UpdateWorkoutDto.date
+            serie.workout = updateSeriesDto.workoutId
+            serie.restTime = updateSeriesDto.restTime
+            serie.order = updateSeriesDto.order
 
-            const response = await queryRunner.manager.save(workout)
+            const response = await queryRunner.manager.save(serie)
             await queryRunner.commitTransaction()
             return response
         } catch (error) {
@@ -80,6 +80,6 @@ export class WorkoutsService {
     }
 
     async remove(id: number): Promise<void> {
-        await this.workoutRepository.delete(id)
+        await this.serieRepository.delete(id)
     }
 }

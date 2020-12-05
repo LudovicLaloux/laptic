@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    OneToMany,
+    ManyToOne,
+} from "typeorm"
+import { Serie } from "../../series/entities/serie.entity"
+import { WorkoutCategory } from "../../workout-categories/entities/workout-category.entity"
 
 @Entity()
 export class Workout {
@@ -8,9 +16,18 @@ export class Workout {
     @Column("varchar", { length: 200 })
     name: string
 
-    @Column("varchar", { length: 200 })
-    bloc: string
+    @ManyToOne(
+        () => WorkoutCategory,
+        category => category.workouts,
+    )
+    category: WorkoutCategory
 
     @Column("date")
-    created_date: string
+    date: string
+
+    @OneToMany(
+        () => Serie,
+        serie => serie.workout,
+    )
+    series: Serie[]
 }

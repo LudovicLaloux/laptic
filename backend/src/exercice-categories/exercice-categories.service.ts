@@ -1,19 +1,19 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository, Connection } from "typeorm"
-import { CreateWorkoutDto } from "./dto/create-workout.dto"
-import { UpdateWorkoutDto } from "./dto/update-workout.dto"
-import { Workout } from "./entities/workout.entity"
+import { CreateExerciceCategoryDto } from "./dto/create-exercice-category.dto"
+import { UpdateExerciceCategoryDto } from "./dto/update-exercice-category.dto"
+import { ExerciceCategory } from "./entities/exercice-category.entity"
 
 @Injectable()
-export class WorkoutsService {
+export class ExerciceCategoriesService {
     constructor(
-        @InjectRepository(Workout)
-        private workoutRepository: Repository<Workout>,
+        @InjectRepository(ExerciceCategory)
+        private exerciceCategoryRepository: Repository<ExerciceCategory>,
         private connection: Connection,
     ) {}
 
-    async create(createWorkoutDto: CreateWorkoutDto) {
+    async create(createExerciceCategoryDto: CreateExerciceCategoryDto) {
         // get a connection and create a new query runner
         const queryRunner = this.connection.createQueryRunner()
 
@@ -21,11 +21,10 @@ export class WorkoutsService {
         await queryRunner.connect()
         await queryRunner.startTransaction()
         try {
-            const workout = new Workout()
-            workout.name = createWorkoutDto.name
-            workout.date = createWorkoutDto.date
+            const exerciceCategory = new ExerciceCategory()
+            exerciceCategory.name = createExerciceCategoryDto.name
 
-            const response = await queryRunner.manager.save(workout)
+            const response = await queryRunner.manager.save(exerciceCategory)
             await queryRunner.commitTransaction()
             return response
         } catch (error) {
@@ -38,35 +37,36 @@ export class WorkoutsService {
         }
     }
 
-    findAll(): Promise<Workout[]> {
-        return this.workoutRepository.find()
+    findAll(): Promise<ExerciceCategory[]> {
+        return this.exerciceCategoryRepository.find()
     }
 
-    findOne(id: number): Promise<Workout> {
-        return this.workoutRepository.findOne(id, { relations: ["series"] })
+    findOne(id: number): Promise<ExerciceCategory> {
+        return this.exerciceCategoryRepository.findOne(id)
     }
 
-    async update(id: number, UpdateWorkoutDto: UpdateWorkoutDto) {
-        // // get a connection and create a new query runner
+    async update(
+        id: number,
+        updateExerciceCategoryDto: UpdateExerciceCategoryDto,
+    ) {
+        // get a connection and create a new query runner
         const queryRunner = this.connection.createQueryRunner()
 
         // establish real database connection using our new query runner
         await queryRunner.connect()
         await queryRunner.startTransaction()
         try {
-            // get workout to update
-            const workout = await this.workoutRepository.findOne(id)
-            // if workout doesn't exist, throw error
-            if (!workout) {
+            const category = await this.exerciceCategoryRepository.findOne(id)
+            // if category doesn't exist, throw error
+            if (!category) {
                 throw new HttpException(
-                    "Workout id doesn't exist",
+                    "Exercice category id doesn't exist",
                     HttpStatus.UNPROCESSABLE_ENTITY,
                 )
             }
-            workout.name = UpdateWorkoutDto.name
-            workout.date = UpdateWorkoutDto.date
+            category.name = updateExerciceCategoryDto.name
 
-            const response = await queryRunner.manager.save(workout)
+            const response = await queryRunner.manager.save(category)
             await queryRunner.commitTransaction()
             return response
         } catch (error) {
@@ -80,6 +80,6 @@ export class WorkoutsService {
     }
 
     async remove(id: number): Promise<void> {
-        await this.workoutRepository.delete(id)
+        await this.exerciceCategoryRepository.delete(id)
     }
 }

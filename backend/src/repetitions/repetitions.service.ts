@@ -1,19 +1,19 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository, Connection } from "typeorm"
-import { CreateWorkoutDto } from "./dto/create-workout.dto"
-import { UpdateWorkoutDto } from "./dto/update-workout.dto"
-import { Workout } from "./entities/workout.entity"
+import { CreateRepetitionDto } from "./dto/create-repetition.dto"
+import { UpdateRepetitionDto } from "./dto/update-repetition.dto"
+import { Repetition } from "./entities/repetition.entity"
 
 @Injectable()
-export class WorkoutsService {
+export class RepetitionsService {
     constructor(
-        @InjectRepository(Workout)
-        private workoutRepository: Repository<Workout>,
+        @InjectRepository(Repetition)
+        private repetitionRepository: Repository<Repetition>,
         private connection: Connection,
     ) {}
 
-    async create(createWorkoutDto: CreateWorkoutDto) {
+    async create(createRepetitionDto: CreateRepetitionDto) {
         // get a connection and create a new query runner
         const queryRunner = this.connection.createQueryRunner()
 
@@ -21,11 +21,13 @@ export class WorkoutsService {
         await queryRunner.connect()
         await queryRunner.startTransaction()
         try {
-            const workout = new Workout()
-            workout.name = createWorkoutDto.name
-            workout.date = createWorkoutDto.date
+            const repetition = new Repetition()
+            repetition.repNumber = createRepetitionDto.repNumber
+            repetition.repTime = createRepetitionDto.repTime
+            repetition.rest = createRepetitionDto.rest
+            repetition.order = createRepetitionDto.order
 
-            const response = await queryRunner.manager.save(workout)
+            const response = await queryRunner.manager.save(repetition)
             await queryRunner.commitTransaction()
             return response
         } catch (error) {
@@ -38,35 +40,36 @@ export class WorkoutsService {
         }
     }
 
-    findAll(): Promise<Workout[]> {
-        return this.workoutRepository.find()
+    findAll(): Promise<Repetition[]> {
+        return this.repetitionRepository.find()
     }
 
-    findOne(id: number): Promise<Workout> {
-        return this.workoutRepository.findOne(id, { relations: ["series"] })
+    findOne(id: number): Promise<Repetition> {
+        return this.repetitionRepository.findOne(id)
     }
 
-    async update(id: number, UpdateWorkoutDto: UpdateWorkoutDto) {
-        // // get a connection and create a new query runner
+    async update(id: number, updateRepetitionDto: UpdateRepetitionDto) {
+        // get a connection and create a new query runner
         const queryRunner = this.connection.createQueryRunner()
 
         // establish real database connection using our new query runner
         await queryRunner.connect()
         await queryRunner.startTransaction()
         try {
-            // get workout to update
-            const workout = await this.workoutRepository.findOne(id)
-            // if workout doesn't exist, throw error
-            if (!workout) {
+            const repetition = await this.repetitionRepository.findOne(id)
+            // if serie doesn't exist, throw error
+            if (!repetition) {
                 throw new HttpException(
-                    "Workout id doesn't exist",
+                    "Repetition id doesn't exist",
                     HttpStatus.UNPROCESSABLE_ENTITY,
                 )
             }
-            workout.name = UpdateWorkoutDto.name
-            workout.date = UpdateWorkoutDto.date
+            repetition.repNumber = updateRepetitionDto.repNumber
+            repetition.repTime = updateRepetitionDto.repTime
+            repetition.rest = updateRepetitionDto.rest
+            repetition.order = updateRepetitionDto.order
 
-            const response = await queryRunner.manager.save(workout)
+            const response = await queryRunner.manager.save(repetition)
             await queryRunner.commitTransaction()
             return response
         } catch (error) {
@@ -80,6 +83,6 @@ export class WorkoutsService {
     }
 
     async remove(id: number): Promise<void> {
-        await this.workoutRepository.delete(id)
+        await this.repetitionRepository.delete(id)
     }
 }

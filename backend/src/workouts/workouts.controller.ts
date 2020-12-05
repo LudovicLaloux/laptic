@@ -1,8 +1,19 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, ParseIntPipe, HttpStatus, ValidationPipe } from "@nestjs/common"
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Put,
+    Param,
+    Delete,
+    ParseIntPipe,
+    HttpStatus,
+    ValidationPipe,
+} from "@nestjs/common"
 import { WorkoutsService } from "./workouts.service"
-import { CreateWorkoutDto } from "./dto/createWorkout.dto"
+import { CreateWorkoutDto } from "./dto/create-workout.dto"
 import { Workout } from "./entities/workout.entity"
-import { UpdateWorkoutDto } from "./dto/updateWorkout.dto"
+import { UpdateWorkoutDto } from "./dto/update-workout.dto"
 
 @Controller("workouts")
 export class WorkoutsController {
@@ -21,7 +32,7 @@ export class WorkoutsController {
     @Get(":id")
     findOne(
         @Param("id")
-        id: number
+        id: number,
     ) {
         return this.workoutsService.findOne(id)
     }
@@ -29,8 +40,8 @@ export class WorkoutsController {
     @Put(":id")
     update(
         @Param("id")
-        id: number, 
-        @Body() UpdateWorkoutDto: UpdateWorkoutDto
+        id: number,
+        @Body() UpdateWorkoutDto: UpdateWorkoutDto,
     ) {
         return this.workoutsService.update(id, UpdateWorkoutDto)
     }
@@ -38,7 +49,7 @@ export class WorkoutsController {
     @Delete(":id")
     remove(
         @Param("id")
-        id: number
+        id: number,
     ) {
         return this.workoutsService.remove(id)
     }
