@@ -1,13 +1,6 @@
-import {
-    Entity,
-    Column,
-    PrimaryGeneratedColumn,
-    ManyToOne,
-    OneToMany,
-} from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm"
 import { Workout } from "../../workouts/entities/workout.entity"
 import { Exercice } from "../../exercices/entities/exercice.entity"
-import { Repetition } from "../../repetitions/entities/repetition.entity"
 
 @Entity()
 export class Serie {
@@ -20,17 +13,17 @@ export class Serie {
     @Column("int")
     order: number
 
+    @Column("int")
+    repNumber: number
+
+    @Column("varchar", { length: 45 })
+    repTime: string
+
     @ManyToOne(
         () => Exercice,
         exercice => exercice.series,
     )
     exercice: Exercice
-
-    @OneToMany(
-        type => Repetition,
-        repetition => repetition.serie,
-    )
-    repetitions: Repetition[]
 
     @ManyToOne(
         type => Workout,

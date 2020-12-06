@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Put, Param, Delete } from "@nestjs/common"
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Put,
+    Param,
+    Delete,
+    HttpException,
+    HttpStatus,
+} from "@nestjs/common"
 import { SeriesService } from "./series.service"
 import { CreateSeriesDto } from "./dto/create-series.dto"
 import { UpdateSeriesDto } from "./dto/update-series.dto"
@@ -9,6 +19,23 @@ export class SeriesController {
 
     @Post()
     create(@Body() createSeriesDto: CreateSeriesDto) {
+        if (
+            createSeriesDto.repNumber === null &&
+            createSeriesDto.repTime === null
+        ) {
+            throw new HttpException(
+                "Both repetition number and repetition time cannot be null at the same time",
+                HttpStatus.UNPROCESSABLE_ENTITY,
+            )
+        } else if (
+            createSeriesDto.repNumber !== null &&
+            createSeriesDto.repTime !== null
+        ) {
+            throw new HttpException(
+                "Both repetition number and repetition time cannot have a value at the same time",
+                HttpStatus.UNPROCESSABLE_ENTITY,
+            )
+        }
         return this.seriesService.create(createSeriesDto)
     }
 

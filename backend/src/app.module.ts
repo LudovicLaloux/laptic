@@ -3,11 +3,10 @@ import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import { WorkoutsModule } from "./workouts/workouts.module"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { SeriesModule } from './series/series.module';
-import { WorkoutCategoriesModule } from './workout-categories/workout-categories.module';
-import { ExercicesModule } from './exercices/exercices.module';
-import { ExerciceCategoriesModule } from './exercice-categories/exercice-categories.module';
-import { RepetitionsModule } from './repetitions/repetitions.module';
+import { SeriesModule } from "./series/series.module"
+import { WorkoutCategoriesModule } from "./workout-categories/workout-categories.module"
+import { ExercicesModule } from "./exercices/exercices.module"
+import { ExerciceCategoriesModule } from "./exercice-categories/exercice-categories.module"
 
 @Module({
     imports: [
@@ -26,7 +25,6 @@ import { RepetitionsModule } from './repetitions/repetitions.module';
         WorkoutCategoriesModule,
         ExercicesModule,
         ExerciceCategoriesModule,
-        RepetitionsModule,
     ],
     controllers: [AppController],
     providers: [AppService],

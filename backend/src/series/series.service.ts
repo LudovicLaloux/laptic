@@ -25,6 +25,8 @@ export class SeriesService {
             serie.order = createSeriesDto.order
             serie.workout = createSeriesDto.workoutId
             serie.exercice = createSeriesDto.exerciceId
+            serie.repTime = createSeriesDto.repTime
+            serie.repNumber = createSeriesDto.repNumber
 
             const response = await queryRunner.manager.save(serie)
             await queryRunner.commitTransaction()
@@ -68,6 +70,9 @@ export class SeriesService {
             serie.workout = updateSeriesDto.workoutId
             serie.restTime = updateSeriesDto.restTime
             serie.order = updateSeriesDto.order
+            serie.exercice = updateSeriesDto.exerciceId
+            serie.repTime = updateSeriesDto.repTime
+            serie.repNumber = updateSeriesDto.repNumber
 
             const response = await queryRunner.manager.save(serie)
             await queryRunner.commitTransaction()
